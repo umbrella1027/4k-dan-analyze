@@ -27,7 +27,7 @@ index.html
 或使用簡單 local server：
 
 ```bash
-python3 -m http.server 8080
+py -m http.server 8080
 ```
 
 然後開啟：
