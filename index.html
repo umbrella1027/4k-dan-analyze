@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SRR Azusa 4K Analyzer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body class="min-h-screen text-slate-100">
+  <main>
+    <section class="hero-stage">
+      <img class="hero-image" src="./assets/srr-hero.png" alt="" />
+      <div class="hero-shade"></div>
+
+      <header class="site-header">
+        <a class="brand-mark" href="./index.html" aria-label="SRR Azusa 4K Analyzer">
+          <span>SRR</span>
+          <strong>Azusa 4K</strong>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#analyzer">Analyzer</a>
+          <a href="#charts">Curves</a>
+          <a href="#stats">Stats</a>
+        </nav>
+      </header>
+
+      <div class="hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow">osu!mania 4K Difficulty Surface</p>
+          <h1>Star Rating Rebirth</h1>
+          <p class="hero-subtitle">Azusa algorithm rating surface for Reform-style chart analysis.</p>
+          <div class="hero-metrics" aria-label="Engine highlights">
+            <span>4K</span>
+            <span>NPS</span>
+            <span>Strain</span>
+            <span>Reform</span>
+          </div>
+        </div>
+
+        <section id="analyzer" class="analyzer-panel" aria-labelledby="inputTitle">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker">Input</p>
+              <h2 id="inputTitle">Chart Source</h2>
+            </div>
+            <button id="clearBtn" class="icon-button" type="button" title="Clear">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+
+          <div class="file-picker">
+            <input id="osuFileInput" class="sr-only" type="file" accept=".osu,text/plain" />
+            <label id="osuFileLabel" for="osuFileInput" class="file-picker-button">
+              <i data-lucide="upload"></i>
+              <span>Select .osu</span>
+            </label>
+            <div id="fileNameLabel" class="file-name">No file selected</div>
+          </div>
+
+          <textarea
+            id="osuInput"
+            class="chart-input"
+            placeholder="Paste .osu content..."
+          ></textarea>
+
+          <button id="analyzeBtn" class="analyze-button" type="button">
+            <i data-lucide="activity"></i>
+            <span>Analyze Azusa</span>
+          </button>
+        </section>
+      </div>
+    </section>
+
+    <section class="dashboard-shell">
+      <section id="messagePanel" class="hidden rounded-lg border p-4"></section>
+
+      <div class="dashboard-grid">
+        <section class="panel result-card">
+          <div class="section-head">
+            <div>
+              <p class="panel-kicker">Output</p>
+              <h2>Azusa Dashboard</h2>
+            </div>
+          </div>
+          <div id="resultPanel" class="empty-state">
+            Load a 4K .osu chart and run Azusa.
+          </div>
+        </section>
+
+        <section class="panel profile-card">
+          <div class="section-head">
+            <div>
+              <p class="panel-kicker">Profile</p>
+              <h2>Skill Profile</h2>
+            </div>
+          </div>
+          <div id="skillPanel" class="empty-state">No analysis yet.</div>
+        </section>
+      </div>
+
+      <section id="stats" class="panel stats-card">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Telemetry</p>
+            <h2>Statistics</h2>
+          </div>
+        </div>
+        <div id="statsPanel" class="stats-grid"></div>
+      </section>
+    </section>
+
+    <section id="charts" class="charts-shell">
+      <div class="panel chart-card">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Density</p>
+            <h2>NPS Curve</h2>
+          </div>
+        </div>
+        <canvas id="npsChart" height="140"></canvas>
+      </div>
+
+      <div class="panel chart-card">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker">Strain</p>
+            <h2>Azusa Curve</h2>
+          </div>
+        </div>
+        <canvas id="fatigueChart" height="140"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import("./src/app.js").catch(() => {
+      const fallback = document.createElement("script");
+      fallback.src = "./src/srrStandalone.js";
+      document.body.appendChild(fallback);
+    }).finally(() => {
+      window.lucide?.createIcons();
+    });
+  </script>
+</body>
+</html>
