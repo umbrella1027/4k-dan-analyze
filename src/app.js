@@ -47,6 +47,16 @@ function resetFileSelection() {
   if (fileNameLabel) fileNameLabel.textContent = "No file selected";
 }
 
+function readLocalTextFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => resolve(String(reader.result || "")));
+    reader.addEventListener("error", () => reject(reader.error || new Error("File read failed.")));
+    reader.readAsText(file);
+  });
+}
+
 function metric(label, value) {
   return `
     <div class="metric-card">
@@ -261,8 +271,9 @@ function analyze() {
 
 analyzeBtn.addEventListener("click", analyze);
 
-osuFileInput.addEventListener("change", async () => {
-  const file = osuFileInput.files?.[0];
+osuFileInput.addEventListener("change", async (event) => {
+  const input = event.currentTarget;
+  const file = input.files?.[0];
   if (!file) {
     resetFileSelection();
     return;
@@ -275,10 +286,13 @@ osuFileInput.addEventListener("change", async () => {
   }
 
   try {
-    const text = await file.text();
+    fileNameLabel.textContent = `Reading ${file.name}...`;
+    setMessage("success", `Reading ${file.name}...`);
+
+    const text = await readLocalTextFile(file);
     osuInput.value = text;
     fileNameLabel.textContent = file.name;
-    setMessage("success", `Loaded ${file.name}. Click Analyze Azusa to run.`);
+    setMessage("success", `Loaded ${file.name}. The chart content is ready below.`);
     osuInput.focus();
   } catch (error) {
     resetFileSelection();
